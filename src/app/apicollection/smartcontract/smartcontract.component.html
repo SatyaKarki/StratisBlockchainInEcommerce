@@ -1,0 +1,166 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Stratis FullNode APIs </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <!--<li class="breadcrumb-item"><a routerLink="/admin">Wallet</a></li>
+          <li class="breadcrumb-item active">Load Wallet</li>-->
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!--Get Receipt-->
+
+<form (ngSubmit)="smartcontractGetReceiptForm.form.valid && SmartContractReceipt()" #smartcontractGetReceiptForm="ngForm">
+  <!-- SELECT2 EXAMPLE -->
+  <div class="card card-primary card-outline">
+    <div class="card-header">
+      <h3 class="card-title">Smart Contract Receipt</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Transaction Hash </label>
+            <input type="text" class="form-control" placeholder="Transaction Hash" [ngClass]="{ 'is-invalid': smartcontractGetReceiptForm.submitted && txHash.invalid }" [(ngModel)]="smartContractReceipt.txHash" name="txHash" #txHash="ngModel" required>
+            <div class="text-danger" *ngIf="smartcontractGetReceiptForm.submitted && txHash.invalid">
+              <p *ngIf="txHash.errors?.required">Transaction Hash is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Get Receipt</button>
+        </div>
+        <!-- /.col -->
+
+      </div>
+
+      <!-- /.card-body -->
+      <div *ngIf="resultGetReceipt">
+        <h3 class="card-title">Response output</h3><br />
+        <span><span class="badge">Transaction Hash:</span> {{resultGetReceipt.transactionHash}}</span><br />
+        <span><span class="badge">Block Hash:</span>  {{resultGetReceipt.blockHash}}</span><br />
+        <span><span class="badge">PostState:</span> {{resultGetReceipt.postState}}</span><br />
+        <span><span class="badge">From:</span>  {{resultGetReceipt.from}}</span><br />
+        <span><span class="badge">To:</span>  {{resultGetReceipt.to}}</span><br />
+        <span><span class="badge">GasUsed:</span>  {{resultGetReceipt.gasUsed}}</span><br />
+        <span><span class="badge">New Contract Address:</span> {{resultGetReceipt.newContractAddress}}</span><br />
+        <span><span class="badge">Success:</span>  {{resultGetReceipt.success}}</span><br />
+        <span><span class="badge">Return Value:</span> {{resultGetReceipt.returnValue}}</span><br />
+        <span><span class="badge">Bloom:</span>  {{resultGetReceipt.bloom}}</span><br />
+        <span><span class="badge">Error:</span>  {{resultGetReceipt.error}}</span><br />
+        <span><span class="badge">Log:</span>  {{resultGetReceipt.logs}}</span><br />
+      </div>
+    </div>
+  </div>
+
+</form>
+
+
+<form (ngSubmit)="smartcontractLocalCallForm.form.valid && SmartContractForLocalCall()" #smartcontractLocalCallForm="ngForm">
+  <!-- SELECT2 EXAMPLE -->
+  <div class="card card-primary card-outline">
+    <div class="card-header">
+      <h3 class="card-title">Smart Contract Local Call</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Contract Address </label>
+            <input type="text" class="form-control" placeholder="Contract Address" [ngClass]="{ 'is-invalid': smartcontractLocalCallForm.submitted && contractAddress.invalid }" [(ngModel)]="smartContractLocalCall.contractAddress" name="contractAddress" #contractAddress="ngModel" required>
+            <div class="text-danger" *ngIf="smartcontractLocalCallForm.submitted && contractAddress.invalid">
+              <p *ngIf="contractAddress.errors?.required">Contract Address is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Method Name </label>
+            <input type="text" class="form-control" placeholder="Method Name" [ngClass]="{ 'is-invalid': smartcontractLocalCallForm.submitted && methodName.invalid }" [(ngModel)]="smartContractLocalCall.methodName" name="methodName" #methodName="ngModel" required>
+            <div class="text-danger" *ngIf="smartcontractLocalCallForm.submitted && methodName.invalid">
+              <p *ngIf="methodName.errors?.required">Method Name is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="smartContractLocalCall.amount" name="amount" #amount="ngModel" [ngClass]="{ 'is-invalid': smartcontractLocalCallForm.submitted && amount.invalid }" required>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Gas Price</label>
+            <input type="text" class="form-control" placeholder="Gas Price" [(ngModel)]="smartContractLocalCall.gasPrice" name="gasPrice" #gasPrice="ngModel">
+
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Gas Limit</label>
+            <input type="text" class="form-control" placeholder="Gas Limit" [(ngModel)]="smartContractLocalCall.gasLimit" name="gasLimit" #gasLimit="ngModel">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Sender</label>
+            <input type="text" class="form-control" placeholder="Sender" [(ngModel)]="smartContractLocalCall.sender" name="sender" #sender="ngModel">
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Parameters</label>
+            <input type="text" class="form-control" placeholder="Parameters" [(ngModel)]="parameter" name="parameters" #parameters="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Make Local Call</button>
+        </div>
+      </div>
+
+      <!-- /.card-body -->
+      <div *ngIf="localCallResponseOut">
+        <h3 class="card-title">Response output</h3><br />
+        <span><span class="badge">Internal Transfer:</span>  {{localCallResponseOut.internalTransfers}}</span><br />
+        <span><span class="badge">GasConsumed Value:</span> {{localCallResponseOut.gasConsumed.value}}</span><br />
+        <span><span class="badge">Revert:</span>  {{localCallResponseOut.revert}}</span><br />
+        <span><span class="badge">Error Message:</span>  {{localCallResponseOut.errorMessage}}</span><br />
+        <span><span class="badge">Return:</span>  {{localCallResponseOut.return}}</span><br />
+        <span><span class="badge">Log:</span>  {{localCallResponseOut.logs}}</span><br />
+      </div>
+    </div>
+
+  </div>
+  <div class="card-footer bg-gradient-green">
+    Stratis Blockchain.
+  </div>
+  <!-- /.card -->
+
+</form>

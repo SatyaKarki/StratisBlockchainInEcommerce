@@ -1,0 +1,278 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Stratis FullNode APIs </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <!--<li class="breadcrumb-item"><a routerLink="/admin">Wallet</a></li>
+          <li class="breadcrumb-item active">Load Wallet</li>-->
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!--SmartContract Wallet Create-->
+
+<form (ngSubmit)="smartContractWalletCreateForm.form.valid && SmartContractWalletCreate()" #smartContractWalletCreateForm="ngForm">
+  <!-- SELECT2 EXAMPLE -->
+  <div class="card card-primary card-outline">
+    <div class="card-header">
+      <h3 class="card-title">Smart Contract Wallet Create</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Wallet Name</label>
+            <input type="text" class="form-control" placeholder="Wallet Name" [ngClass]="{ 'is-invalid': smartContractWalletCreateForm.submitted && walletName.invalid }" [(ngModel)]="smartContractWalletCreate.walletName" name="walletName" #walletName="ngModel" required>
+            <div class="text-danger" *ngIf="smartContractWalletCreateForm.submitted && walletName.invalid">
+              <p *ngIf="walletName.errors?.required">Wallet Name is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Account Name</label>
+            <input type="text" class="form-control" placeholder="Account Name" [(ngModel)]="smartContractWalletCreate.accountName" name="accountName" #accountName="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCreateForm.submitted && accountName.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCreateForm.submitted && accountName.invalid">
+              <p *ngIf="accountName.errors?.required">Account Name is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Password</label>
+            <input type="text" class="form-control" placeholder="Password" [(ngModel)]="smartContractWalletCreate.password" name="password" #password="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCreateForm.submitted && password.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCreateForm.submitted && password.invalid">
+              <p *ngIf="password.errors?.required">Wallet Password is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="smartContractWalletCreate.amount" name="amount" #amount="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCreateForm.submitted && amount.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCreateForm.submitted && amount.invalid">
+              <p *ngIf="amount.errors?.required">Amount is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Outpoints</label>
+            <input type="text" class="form-control" placeholder="Outpoints" [(ngModel)]="smartContractWalletCreate.outpoints" name="outpoints" #outpoints="ngModel">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Fee Amount</label>
+            <input type="text" class="form-control" placeholder="Fee Amount" [(ngModel)]="smartContractWalletCreate.feeAmount" name="feeAmount" #feeAmount="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Contract Code</label>
+            <input type="text" class="form-control" placeholder="Contract Code" [(ngModel)]="smartContractWalletCreate.contractCode" name="contractCode" #contractCode="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCreateForm.submitted && contractCode.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCreateForm.submitted && contractCode.invalid">
+              <p *ngIf="contractCode.errors?.required">Contract Code is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Gas Price</label>
+            <input type="text" class="form-control" placeholder="Gas Price" [(ngModel)]="smartContractWalletCreate.gasPrice" name="gasPrice" #gasPrice="ngModel">
+
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Gas Limit</label>
+            <input type="text" class="form-control" placeholder="Gas Limit" [(ngModel)]="smartContractWalletCreate.gasLimit" name="gasLimit" #gasLimit="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Sender</label>
+            <input type="text" class="form-control" placeholder="Sender" [(ngModel)]="smartContractWalletCreate.sender" name="sender" #sender="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCreateForm.submitted && sender.invalid }" required>
+            <!--<div class="text-danger" *ngIf="smartContractWalletCreateForm.submitted && sender.invalid">
+              <p *ngIf="sender.errors?.required">Contract Code is required</p>
+            </div>-->
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Parameters</label>
+            <input type="text" class="form-control" placeholder="Parameters" [(ngModel)]="parameter" name="parameters" #parameters="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Create Wallet</button>
+        </div>
+      </div>
+      <div *ngIf="contractOutputTrnHash">
+        <span>
+          <span>Transaction Hash:  </span>  {{contractOutputTrnHash}}
+        </span>
+      </div>
+    </div>  
+  </div>
+
+</form>
+
+<!--SmartContract Wallet Call-->
+<form (ngSubmit)="smartContractWalletCallForm.form.valid && SmartContractWalletCall()" #smartContractWalletCallForm="ngForm">
+  <div class="card card-primary card-outline">
+    <div class="card-header">
+      <h3 class="card-title">Smart Contract Wallet Call</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Wallet Name</label>
+            <input type="text" class="form-control" placeholder="Wallet Name" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && walletName1.invalid }" [(ngModel)]="smartContractWalletCall.walletName" name="walletName1" #walletName1="ngModel" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && walletName1.invalid">
+              <p *ngIf="walletName1.errors?.required">Wallet Name is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Account Name</label>
+            <input type="text" class="form-control" placeholder="Account Name" [(ngModel)]="smartContractWalletCall.accountName" name="accountName1" #accountName1="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && accountName1.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && accountName1.invalid">
+              <p *ngIf="accountName1.errors?.required">Account Name is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Contract Address</label>
+            <input type="text" class="form-control" placeholder="Contract Address" [(ngModel)]="smartContractWalletCall.contractAddress" name="contractAddress" #contractAddress="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && contractAddress.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && contractAddress.invalid">
+              <p *ngIf="contractAddress.errors?.required">Contract Address is required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Password</label>
+            <input type="text" class="form-control" placeholder="Password" [(ngModel)]="smartContractWalletCall.password" name="password1" #password1="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && password1.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && password1.invalid">
+              <p *ngIf="password1.errors?.required">Wallet Password is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="smartContractWalletCall.amount" name="amount" #amount="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && amount.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && amount.invalid">
+              <p *ngIf="amount.errors?.required">Amount is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Outpoints</label>
+            <input type="text" class="form-control" placeholder="Outpoints" [(ngModel)]="smartContractWalletCall.outpoints" name="outpoints" #outpoints="ngModel">
+          </div>
+        </div>       
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Fee Amount</label>
+            <input type="text" class="form-control" placeholder="Fee Amount" [(ngModel)]="smartContractWalletCall.feeAmount" name="feeAmount" #feeAmount="ngModel">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Gas Price</label>
+            <input type="text" class="form-control" placeholder="Gas Price" [(ngModel)]="smartContractWalletCall.gasPrice" name="gasPrice" #gasPrice="ngModel">
+
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Gas Limit</label>
+            <input type="text" class="form-control" placeholder="Gas Limit" [(ngModel)]="smartContractWalletCall.gasLimit" name="gasLimit" #gasLimit="ngModel">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Sender</label>
+            <input type="text" class="form-control" placeholder="Sender" [(ngModel)]="smartContractWalletCall.sender" name="sender1" #sender1="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && sender1.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && sender1.invalid">
+              <p *ngIf="sender1.errors?.required">Sender is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Method Name</label>
+            <input type="text" class="form-control" placeholder="Method Name" [(ngModel)]="smartContractWalletCall.methodName" name="methodName" #methodName="ngModel" [ngClass]="{ 'is-invalid': smartContractWalletCallForm.submitted && methodName.invalid }" required>
+            <div class="text-danger" *ngIf="smartContractWalletCallForm.submitted && methodName.invalid">
+              <p *ngIf="methodName.errors?.required">Method Name is required</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Parameters</label>
+            <input type="text" class="form-control" placeholder="Parameters" [(ngModel)]="parameter" name="parameters" #parameters="ngModel">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Wallet Call</button>
+        </div>
+        <!-- /.col -->
+      </div>
+      <div *ngIf="smartcontractWalletCallOutput">
+        <h3 class="card-title">Response output</h3><br />
+        <span><span class="badge">Fee :</span> {{smartcontractWalletCallOutput.fee}}</span><br />
+        <span><span class="badge">Hex:</span>  {{smartcontractWalletCallOutput.hex}}</span><br />
+        <span><span class="badge">Message:</span> {{smartcontractWalletCallOutput.message}}</span><br />
+        <span><span class="badge">Success:</span>  {{smartcontractWalletCallOutput.success}}</span><br />
+        <span><span class="Transaction Id">To:</span>  {{smartcontractWalletCallOutput.transactionId}}</span><br />
+      </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer bg-gradient-green">
+      Stratis Blockchain.
+    </div>
+  </div>
+</form>

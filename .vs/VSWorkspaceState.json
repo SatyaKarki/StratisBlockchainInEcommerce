@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\apicollection",
+    "\\src\\app\\apicollection\\smartcontractwallet",
+    "\\src\\app\\home",
+    "\\src\\app\\_guard",
+    "\\src\\app\\_model",
+    "\\src\\app\\_service",
+    "\\src\\app\\_service\\stratisfullnode"
+  ],
+  "SelectedNode": "\\src\\app\\_service\\stratisfullnode\\wallet.service.ts",
+  "PreviewInSolutionExplorer": false
+}

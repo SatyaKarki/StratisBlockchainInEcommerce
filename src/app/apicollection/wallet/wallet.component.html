@@ -1,0 +1,258 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Stratis FullNode APIs </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a routerLink="/admin">Wallet</a></li>
+          <li class="breadcrumb-item active">Load Wallet</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+     <form (ngSubmit)="walletLoadForm.form.valid && LoadWallet()" #walletLoadForm="ngForm">     
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+          <h3 class="card-title">Wallet Load</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" placeholder="Name" [ngClass]="{ 'is-invalid': walletLoadForm.submitted && name.invalid }" [(ngModel)]="login.name" name="name" #name="ngModel" required>
+                <div class="text-danger" *ngIf="walletLoadForm.submitted && name.invalid">
+                  <p *ngIf="name.errors?.required">Name is required</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Password</label>
+                <input type="text" class="form-control" placeholder="Password" [(ngModel)]="login.password" name="type" #type="ngModel" [ngClass]="{ 'is-invalid': walletLoadForm.submitted && type.invalid }" required>
+                <div class="text-danger" *ngIf="walletLoadForm.submitted && type.invalid">
+                  <p *ngIf="type.errors?.required">Password is required</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Load Wallet</button>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6" *ngIf="isConnected">
+              <span class="badge badge-success float-sm-right"> Full Node Connection Successful</span>
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </form>
+    <!--Wallet Balance-->
+    <form (ngSubmit)="walletBalanceForm.form.valid && WalletBalance()" #walletBalanceForm="ngForm">
+      <!-- SELECT2 EXAMPLE -->
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+          <h3 class="card-title">Wallet Balance</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Wallet Name</label>
+                <input type="text" class="form-control" placeholder="Wallet Name" [ngClass]="{ 'is-invalid': walletBalanceForm.submitted && walletname.invalid }" [(ngModel)]="walletbalance.walletname" name="walletname" #walletname="ngModel" required>
+                <div class="text-danger" *ngIf="walletBalanceForm.submitted && name.invalid">
+                  <p *ngIf="walletname.errors?.required">Wallet Name is required</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Account Name</label>
+                <input type="text" class="form-control" placeholder="Account Name" [(ngModel)]="walletbalance.accountname" name="accountname" #accountname="ngModel" [ngClass]="{ 'is-invalid': walletBalanceForm.submitted && accountname.invalid }" required>
+                <div class="text-danger" *ngIf="walletBalanceForm.submitted && accountname.invalid">
+                  <p *ngIf="accountname.errors?.required">Account Name is required</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="includebalancebyaddress">IncludeBalanceByAddress</label>
+              <select class="custom-select" [(ngModel)]="walletbalance.includebalancebyaddress" name="includebalancebyaddress">
+                <option *ngFor="let includebalance of IncludeBalanceByAddress" [ngValue]="includebalance">{{includebalance}}</option>
+              </select>
+            </div>
+          </div>
+          <div>
+
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Load Wallet Balance</button>
+            </div>
+            <!-- /.col -->
+
+          </div>
+          <div *ngIf="walletbalances" class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <table id="appsettingtable" class="table table-striped table- table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Account Name</th>
+                      <th>Path</th>
+                      <th>CoinType</th>
+                      <th>AmountConfirmed</th>
+                      <th>Modified by</th>
+                      <th>SpendableAmount </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let balance of walletbalances">
+                      <td>{{balance.accountName}}</td>
+                      <td>{{balance.accountHdPath}}</td>
+                      <td>{{balance.coinType}}</td>
+                      <td>{{balance.amountConfirmed}}</td>
+                      <td>{{balance.amountUnconfirmed}}</td>
+                      <td>
+                        {{balance.spendableAmount}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <h3 class="card-title">List of Addresses</h3>
+            <div *ngFor="let balance of walletbalances">
+              <div *ngFor="let add of balance.addresses">
+                <span><span class="badge">Address:</span>  {{add.address}}</span>
+                <span><span class="badge">IsUsed:</span>  {{add.isUsed}}</span>
+                <span><span class="badge">IsChange:</span>  {{add.isChange}}</span>
+                <span><span class="badge">Amount Confirmed:</span>  {{add.amountConfirmed}}</span>
+                <span><span class="badge">Amount Unconfirmed:</span>  {{add.amountUnconfirmed}}</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+
+    </form>
+
+    <!--Wallet Split Coins-->
+    <form (ngSubmit)="walletSplitCoinForm.form.valid && WalletAplitCoins()" #walletSplitCoinForm="ngForm">
+      <!-- SELECT2 EXAMPLE -->
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+          <h3 class="card-title">Wallet Split Coins</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Wallet Name</label>
+                <input type="text" class="form-control" placeholder="Wallet Name" [ngClass]="{ 'is-invalid': walletSplitCoinForm.submitted && walletNameSplitCoin.invalid }" [(ngModel)]="walletSplitCoin.walletName" name="walletName" #walletNameSplitCoin="ngModel" required>
+                <div class="text-danger" *ngIf="walletSplitCoinForm.submitted && walletNameSplitCoin.invalid">
+                  <p *ngIf="walletNameSplitCoin.errors?.required">Wallet Name is required</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Account Name</label>
+                <input type="text" class="form-control" placeholder="Account Name" [(ngModel)]="walletSplitCoin.accountName" name="accountName" #accountNameSplitCoin="ngModel" [ngClass]="{ 'is-invalid': walletSplitCoinForm.submitted && accountNameSplitCoin.invalid }" required>
+                <div class="text-danger" *ngIf="walletSplitCoinForm.submitted && accountNameSplitCoin.invalid">
+                  <p *ngIf="accountNameSplitCoin.errors?.required">Account Name is required</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Wallet Password</label>
+                <input type="text" class="form-control" placeholder="Wallet Password" [(ngModel)]="walletSplitCoin.walletPassword" name="walletPassword" #walletpassword="ngModel" [ngClass]="{ 'is-invalid': walletSplitCoinForm.submitted && walletpassword.invalid }" required>
+                <div class="text-danger" *ngIf="walletSplitCoinForm.submitted && walletpassword.invalid">
+                  <p *ngIf="walletpassword.errors?.required">Wallet Password is required</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Amount to Split</label>
+                <input type="text" class="form-control" placeholder="No of Aplit" [(ngModel)]="walletSplitCoin.totalAmountToSplit" name="totalAmountToSplit" #totalAmountToSplit="ngModel" [ngClass]="{ 'is-invalid': walletSplitCoinForm.submitted && totalAmountToSplit.invalid }" required>
+                <div class="text-danger" *ngIf="walletSplitCoinForm.submitted && totalAmountToSplit.invalid">
+                  <p *ngIf="totalAmountToSplit.errors?.required">No of Split is required</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>No of Split</label>
+                <input type="text" class="form-control" placeholder="No of Aplit" [(ngModel)]="walletSplitCoin.utxosCount" name="utxosCount" #utxosCount="ngModel" [ngClass]="{ 'is-invalid': walletSplitCoinForm.submitted && utxosCount.invalid }" required>
+                <div class="text-danger" *ngIf="walletSplitCoinForm.submitted && utxosCount.invalid">
+                  <p *ngIf="utxosCount.errors?.required">No of Split is required</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <button type="submit" class="btn btn-primary"><i class="fa fa-lock"></i> Wallet Split Coins</button>
+            </div>
+            <!-- /.col -->
+
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+
+      <div *ngIf="walletSplitedCoins" class="card card-primary">
+        <!-- /.card-header -->     
+        <div class="card-body">
+          <div class="row">
+            <table id="appsettingtable" class="table table-striped table- table-bordered">
+              <thead>
+                <tr>
+                  <th>Address</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let splitCoin of walletSplitedCoins">
+                  <td>{{splitCoin.address}}</td>
+                  <td>{{splitCoin.amount}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- /.card-body -->
+        <div class="card-footer bg-gradient-green">
+          Stratis Blockchain.
+        </div>
+      </div>
+      <!-- /.card -->
+    </form>
+  </div>
+</section>
